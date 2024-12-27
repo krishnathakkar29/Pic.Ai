@@ -41,6 +41,7 @@ const signupFormSchema = z
 const SignupForm = ({ className }: Props) => {
   const [loading, setLoading] = useState(false);
   const toastId = useId();
+
   const form = useForm<z.infer<typeof signupFormSchema>>({
     resolver: zodResolver(signupFormSchema),
     defaultValues: {
@@ -61,12 +62,13 @@ const SignupForm = ({ className }: Props) => {
     const { success, error } = await signup(formData);
     if (success) {
       toast.success("Signup Successful", { id: toastId });
+      redirect("/login");
+      setLoading(false);
     } else {
       toast.error(String(error), { id: toastId });
-      redirect("/login");
+      setLoading(false);
     }
 
-    setLoading(false);
   }
   return (
     <div className={(cn("grid gap-6"), className)}>
